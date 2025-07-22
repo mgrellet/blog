@@ -4,6 +4,8 @@ import com.blog.domain.entities.Category;
 import com.blog.repositories.CategoryRepository;
 import com.blog.services.CategoryService;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     return categoryRepository.save(category);
+  }
+
+  @Override
+  public void deleteCategory(UUID id) {
+    Optional<Category> category = categoryRepository.findById(id);
+    if(category.isPresent()){
+      if(!category.get().getPosts().isEmpty()){
+        throw new IllegalStateException("Category has posts associated with it");
+      }
+      categoryRepository.deleteById(id);
+    }
   }
 
 
