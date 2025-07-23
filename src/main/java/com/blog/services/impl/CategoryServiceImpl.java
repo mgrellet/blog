@@ -3,6 +3,7 @@ package com.blog.services.impl;
 import com.blog.domain.entities.Category;
 import com.blog.repositories.CategoryRepository;
 import com.blog.services.CategoryService;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,6 +41,12 @@ public class CategoryServiceImpl implements CategoryService {
       }
       categoryRepository.deleteById(id);
     }
+  }
+
+  @Override
+  public Category getCategoryById(UUID id) {
+    return categoryRepository.findById(id)
+        .orElseThrow(()-> new EntityNotFoundException("Category not found with id" + id));
   }
 
 

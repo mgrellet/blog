@@ -1,10 +1,10 @@
 package com.blog.services.impl;
 
-import static java.util.stream.Collectors.toList;
 
 import com.blog.domain.entities.Tag;
 import com.blog.repositories.TagRepository;
 import com.blog.services.TagService;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -37,14 +37,14 @@ public class TagServiceImpl implements TagService {
     List<Tag> newTags = tagNames.stream()
         .filter(tagName -> !existingTagNames.contains(tagName))
         .map(name ->
-          Tag.builder()
-              .name(name)
-              .posts(new HashSet<>())
-              .build())
+            Tag.builder()
+                .name(name)
+                .posts(new HashSet<>())
+                .build())
         .toList();
 
     List<Tag> savedTags = new ArrayList<>();
-    if(!newTags.isEmpty()){
+    if (!newTags.isEmpty()) {
       savedTags = tagRepository.saveAll(newTags);
     }
     savedTags.addAll(existingTags);
@@ -54,11 +54,18 @@ public class TagServiceImpl implements TagService {
   @Override
   public void deleteTag(UUID id) {
     tagRepository.findById(id).ifPresent(tag -> {
-      if(!tag.getPosts().isEmpty()){
+      if (!tag.getPosts().isEmpty()) {
         throw new IllegalStateException("Cannot delete tag with posts");
       }
       tagRepository.deleteById(id);
     });
+  }
+
+  @Override
+  public Tag getTagById(UUID id) {
+    return tagRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("No tag found with id: " + id));
+
   }
 
 }
