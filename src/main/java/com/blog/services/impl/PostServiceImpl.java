@@ -19,7 +19,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
-import org.springframework.core.metrics.StartupStep.Tags;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,7 +76,7 @@ public class PostServiceImpl implements PostService {
     Post newPost = new Post();
     newPost.setTitle(createPostRequest.getTitle());
     newPost.setContent(createPostRequest.getContent());
-    newPost.setPostStatus(createPostRequest.getStatus());
+    newPost.setPostStatus(createPostRequest.getPostStatus());
     newPost.setAuthor(user);
     newPost.setReadingTime(calculateTeReadingTime(createPostRequest.getContent()));
 
@@ -97,7 +96,7 @@ public class PostServiceImpl implements PostService {
 
     existingPost.setTitle(updatePostRequest.getTitle());
     existingPost.setContent(updatePostRequest.getContent());
-    existingPost.setPostStatus(updatePostRequest.getStatus());
+    existingPost.setPostStatus(updatePostRequest.getPostStatus());
     existingPost.setReadingTime(calculateTeReadingTime(updatePostRequest.getContent()));
 
     UUID updatePostRequestCategoryId = updatePostRequest.getCategoryId();
@@ -117,6 +116,13 @@ public class PostServiceImpl implements PostService {
     }
 
     return postRepository.save(existingPost);
+  }
+
+  @Override
+  public void deletePost(UUID id) {
+    Post post = getPostById(id);
+    postRepository.delete(post);
+
   }
 
   private Integer calculateTeReadingTime(String content) {
