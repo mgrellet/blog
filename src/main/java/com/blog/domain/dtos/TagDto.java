@@ -12,6 +12,6 @@ public class TagDto {
 
   private UUID id;
   private String name;
-  private Integer postCount;
+  private long postCount;
 
 }
