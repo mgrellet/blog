@@ -1,5 +1,6 @@
 package com.blog.domain.dtos;
 
+import com.blog.domain.PostStatus;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -23,5 +24,6 @@ public class PostDto {
   private Integer readingTime;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
+  private PostStatus postStatus;
 
 }

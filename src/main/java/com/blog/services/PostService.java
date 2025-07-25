@@ -9,6 +9,8 @@ import java.util.UUID;
 
 public interface PostService {
 
+  Post getPostById(UUID id);
+
   List<Post> getAllPost(UUID categoryId, UUID tagId);
 
   List<Post> getDraftPost(User user);

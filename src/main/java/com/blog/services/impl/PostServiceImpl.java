@@ -34,6 +34,12 @@ public class PostServiceImpl implements PostService {
   private static final int WORDS_PER_MINUTE = 200;
   private final TagRepository tagRepository;
 
+  @Override
+  public Post getPostById(UUID id) {
+    return postRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Post not found with id " + id));
+  }
+
   @Transactional(readOnly = true)
   @Override
   public List<Post> getAllPost(UUID categoryId, UUID tagId) {
@@ -105,7 +111,7 @@ public class PostServiceImpl implements PostService {
 
     Set<UUID> newTagIds = updatePostRequest.getTagIds();
 
-    if(!existingTagIds.equals(newTagIds)) {
+    if (!existingTagIds.equals(newTagIds)) {
       List<Tag> newTags = tagService.getTagByIds(newTagIds);
       existingPost.setTags(new HashSet<>(newTags));
     }

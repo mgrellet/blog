@@ -23,6 +23,6 @@ public class UpdatePostRequest {
   @Builder.Default
   private Set<UUID> tagIds = new HashSet<>();
 
-  private PostStatus status;
+  private PostStatus postStatus;
 
 }
